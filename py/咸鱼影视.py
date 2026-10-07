@@ -1,32 +1,4 @@
-# -*- coding: utf-8 -*-
-# ============ 咸鱼影视(jxw888.cn) 爬虫源 · 88测试结构模板 r3.1.4 套写 ============
-# 站点: 咸鱼影视 App(ch.包名 cn.jxw888.xianyu v1.6.3)/WebView壳, boot.json -> home=https://www.jxw888.cn/
-# 协议(真站取证 2026-09-19): 分类 /list/{tid}.html | 翻页 /list/{tid}-{pg}.html | 详情 /detail/{id}.html
-#   播放页 /detail/{id}-{sid}-{nid}.html 内嵌 const VOD={...lines:[{name,eps:[{t,u}]}],play_from_raw,play_url_raw}
-#   搜索 /?wd={kw}&pg={n} | 直播 /live.php?act=list|play|epg&name= | 直链 m3u8 无加密(直连200)
-# 套写自 88测试结构模板(派生自71us v7.5·测试版；原母版未动) ============
-# ★88测试版新增: ①_log诊断日志 ②_pid防御解析+header/user_agent双键 ③_safe选集断链保护 ④多级TTL缓存(home3600/详情1800/播放900) ⑤容错取值三件套_dig/_card/_plist(共和国动漫A级)⑥请求串行锁SERIAL(开关)⑦满页判定_pgc ⑧CFGuard过盾引擎(WebView真内核·CF站可选外衣)⑨翻页续读族(单飞去重+游标+补读簿+判死+去重环; 多页源防跳空丢页; 出处cuct v13攻坚)⑩三段续读族(详情/搜索/播放容错续读: 续读梯_rty+列表记忆li+最小结构兜底+预算收件_gather+源黑名单)
-# ★88测试版修正: localProxy入参dict崩溃修复(三形态+key=/url=/img:b64) 失败分支统一[404,'text/plain',''](内核兼容口径)；查错修整(2026-09-15)：未用导入清理3处 + 重复导入合并3处 + 裸except加固10处→Exception，零功能变更
-# ★88-8 过盾引擎: CF_GUARD=1开(CF盾站); _get_raw盾页自动兜底(WebView真内核), cookie自动注入, _gget强通道, cf_verify()手动入口; 引擎段可整段替换(cf_guard.py 2026-09-13)
-# ★88-8b 引擎修正(2026-09-16·同步zzoc实战·均站点无关): ①CF_WVUA='__native__'原生UA铁律(面具UA=挑战内死循环, 原生UA=8.1s过盾) ②过盾成功即CookieManager收cookie自动落盘(修'每请求必走WebView') ③过盾后UA回写(cf_clearance与UA绑定) ④盾页兜底timeout=40s
-# ★88-9 翻页续读族: CONT=1开(多页分类源防跳空丢页); 单飞去重+游标+补读簿+判死+去重环+余光预取; 键 cur:/seen:/hold:/pf:/bf:; 站点仅需实现 _cat_fetch(t,cls,ex2,ex,pn)->(items,pagecount); 回填位置 BF_POS(0尾/1头)
-# ★88-10 三段续读: 详情=续读梯+负缓存+最小结构兜底(li:); 搜索=续读梯+去重环+预算收件_gather+源黑名单(sb:); 播放=续读梯+负缓存; 复用⑨单飞; 负缓存键 mm:
-# ★88-11 搜索开关自开(2026-09-16·fantuan实证): 影视仓聚合搜索只调用 registry.json 里 searchable=1 的源(添加本地源默认全0→源内搜索正常但实机搜索永远空); 本源init时自动把匹配条目 searchable/quickSearch 置1(顶层+site内4处; 改前原文存 .src_bak), App重启后生效; REG_FIX=1 开, REG_MATCH 空=全开/非空=按name或api匹配
-# 定版: 71us模板v7.4(555骨架+能力层) + 勃士13接口四壳协议 | 2026-09-07
-# 13接口=init/homeContent/categoryContent/detailContent/searchContent/playerContent/localProxy/isVideoFormat/manualVideoCheck/getDependence/destroy/progressVideo/setVideoFlags
-# 四壳通用: TVBox/T4(只认555五接口) / 海阔/影视仓1.x(额外调扩展钩子) / 独立加载(无base.spider走兜底)
-# ★自动调用协议(套本模板写源/修复/重构/逆向=自动触发, 先过清单再动手, 缺一不可):
-# ①记忆库检索: query_memory『知识库/影视源开发』→《py源开发技能清单v18》(v18>v17>v16), 开工即查
-# ②技能包13包分层调度(技能库全量13包=目录16个−红果系3资产[fq_crypto_lib/fq_cenc_stream/hongguo_main]; 写源核心调度11包=13−peekpro−ikguard; /sdcard/Download/Operit/skills/):
-#   L0骨架 tvbox-py-v73(本模板母版) | L1入口 pySkill(spider-create全类型7内容) | L2攻坚 gpt56全家桶(eni/INDEX.md路由90项+kit冷咖啡+five_blade五刃)+reverse-skill(87技能逆向路由)+遮天九秘_破甲版(zhetian.py/cf-bypass/aes-decrypt) | L3质量 adaptive四工作台(播放契约/响应边界/图片资源/清洗规范化)并行套用 | L4交付 wei-ai-xiao-ge(影视仓加载契约/测试矩阵)+jk-lingyu-spider(MacCMS/Txmojia样本)
-#   ★包内 references 症状索引(2026-09-19新增·写源遇对应症状即阅): 图片白图/中转慢→adaptive-image-resource-workbench/references/local-relay-hardening.md; 分类空白/首页转圈→adaptive-video-response-workbench/references/api-budget-cache-traps.md; 真机报错但沙箱正常→wei-ai-xiao-ge/references/device-log-first-triage.md; 分类与官网不一致→jk-lingyu-spider/references/taxonomy-sync.md; VIP墙硬锁→遮天九秘_破甲版/技能包/spider-craft/no-auth-cdn-bypass.md
-# r3.1.4 口径修正(2026-09-19·零功能变更): ①技能包口径统一13包(原11=写源核心调度子集,易误读为技能库总数) ②补包内 references 症状索引五章 ③71us v7.5母版保持冻结不动, 本派生版承载口径与索引更新
-# ③交付铁律: py_compile → 555契约字段(coding/sys.path/class Spider(Spider)/init(extend)/homeContent/homeVideoContent/searchContent/categoryContent/playerContent) → 模拟T4全调用链 → 播放链验证 → 双份md5一致
-# 用法: 只改 ★ 区(CONFIG/init), 其余通用; 站点无某项能力直接省略对应方法调用
-# 加载契约: 首行coding/sys.path.append('..')/from base.spider import Spider(带兜底)/class Spider(Spider)
-# ★版本兼容铁律: 全文件禁3.9+API(random.randbytes/removeprefix/removesuffix等; OK影视内置Python≤3.8教训2026-09), 随机字节用bytes([random.randrange(1,256)]), 交付前grep -n 'randbytes'自查
-# ★分隔符铁律: $=名称/地址 | #=选集 | $$$=线路; 严禁$$或$连选集; 线路名与地址$$$段数必须相等
-# ★链路策略v4: 资源默认直连输出, 仅403/防盗链/KEY404/需特殊头才走 localProxy 兜底
+
 import sys, re, json, time, base64, hashlib, threading
 from urllib.parse import urljoin, quote, unquote
 from concurrent.futures import ThreadPoolExecutor, as_completed, Future
@@ -82,6 +54,12 @@ BF_POS = 0  # ★88-9 补读回填位置(0=下一轮尾部/1=头部)
 MISS_TTL = 60  # ★88-10 负缓存时长(详情/播放/搜索失败记忆, 秒)
 LI_CAP = 600  # ★88-10 列表记忆容量(条; 详情失败最小结构兜底用)
 GATHER_BUDGET = 8.0  # ★88-10 搜索预算收件(秒; 聚合源多源收集用)
+
+# ============ ★ API通道(2026-09-19 新挖: /api.php?act=search|detail|list 结构化JSON含全选集) ============
+API = 1  # ★ API通道开关(1开/0关; 开=搜索/详情走 api.php, HTML仅兜底)
+API_MAX = 20  # ★ API搜索结果条数上限(原包整词50条581KB, 截断后再用)
+API_META = 900  # ★ API元数据缓存时长(秒; 命中=详情零请求秒开)
+API_CAP = 80  # ★ API元数据缓存容量(条; 超限裁旧)
 
 def _log(msg):
     if not DEBUG:
@@ -702,6 +680,7 @@ class Spider(Spider):
         self._pc = {}  # 线路probe缓存 {md5:[ts,froms,urls]}
         self._srv = None  # 本地代理线程(延迟启动)
         self._c = {}  # ★88-4 兼容槽(destroy清理用)
+        self._meta = {}  # ★API 元数据缓存 {vid: [ts, api_obj]}(含全选集; 命中详情零请求)
         self._ttl = {}  # ★88-4 多级TTL缓存 {key:[ts,val]}
         self._lock = threading.RLock()  # ★88-6 请求串行锁(SERIAL=1时启用)
         self._inflight = {}  # ★88-9 单飞去重表{键:Future}
@@ -777,6 +756,103 @@ class Spider(Spider):
         elif u.startswith('/'):
             u = self.base + u  # 本站图片 /pic.php?u= 相对路径必拼base
         return u  # 直连优先; 403时 playerContent/localProxy 兜底
+
+    def _api(self, act, **kw):
+        # ★ /api.php?act=search&wd= | act=detail&id= | act=list(&pg=) → JSON
+        u = '%s/api.php?act=%s' % (self.base, act)
+        for k in kw:
+            u += '&%s=%s' % (k, quote(str(kw[k])))
+        h = self._get(u)
+        if not h or '"code"' not in h:
+            return {}
+        try:
+            d = json.loads(h)
+        except Exception:
+            return {}
+        return d if isinstance(d, dict) else {}
+
+    def _meta_set(self, vid, d):
+        if not vid or not isinstance(d, dict):
+            return
+        self._meta[str(vid)] = [time.time(), d]
+        if len(self._meta) > API_CAP:
+            for k in list(self._meta.keys())[:20]:
+                self._meta.pop(k, None)
+
+    def _meta_get(self, vid):
+        v = self._meta.get(str(vid))
+        if v and time.time() - v[0] < API_META:
+            return v[1]
+        return None
+
+    def _lines2pu(self, lines):
+        froms, urls = [], []
+        for ln in (lines or []):
+            if not isinstance(ln, dict):
+                continue
+            name = str(ln.get('name') or '').strip()
+            eps = ln.get('eps') or []
+            if not name or not isinstance(eps, list) or not eps:
+                continue
+            seg = []
+            for k, ep in enumerate(eps):
+                if not isinstance(ep, dict):
+                    continue
+                t = self._safe(str(ep.get('t') or ('第%d集' % (k + 1))).strip())
+                u = str(ep.get('u') or '').strip()
+                if not u:
+                    continue
+                seg.append('%s$%s' % (t or ('第%d集' % (k + 1)), u))
+            if seg:
+                froms.append(FROM_NAMES.get(name, name))
+                urls.append('#'.join(seg))
+        return froms, urls
+
+    def _raw2lines(self, pf, pu):
+        out = []
+        for nm, seg in zip(str(pf or '').split('$$$'), str(pu or '').split('$$$')):
+            eps = []
+            for kv in seg.split('#'):
+                if '$' in kv:
+                    t, u = kv.split('$', 1)
+                    eps.append({'t': t, 'u': u})
+            if eps:
+                out.append({'name': nm, 'eps': eps})
+        return out
+
+    def _mk_detail(self, vid, md):
+        froms, urls = self._lines2pu(md.get('lines') or [])
+        if not froms:
+            froms, urls = self._lines2pu(self._raw2lines(md.get('play_from_raw'), md.get('play_url_raw')))
+        return {'vod_id': vid, 'vod_name': str(md.get('name') or '')[:80],
+                'vod_pic': self._pic(str(md.get('pic') or '')),
+                'vod_year': str(md.get('year') or '')[:9],
+                'vod_area': str(md.get('area') or '')[:20],
+                'vod_class': str(md.get('class') or md.get('type_name') or '')[:80],
+                'vod_director': str(md.get('director') or '')[:60],
+                'vod_actor': str(md.get('actor') or '')[:120],
+                'vod_content': re.sub(r'\s+', ' ', str(md.get('content') or '')).strip()[:500],
+                'vod_remarks': str(md.get('remarks') or '')[:30],
+                'vod_play_from': '$$$'.join(froms), 'vod_play_url': '$$$'.join(urls)}
+
+    def _api_search(self, kw):
+        d = self._api('search', wd=kw)
+        L = d.get('list') if isinstance(d, dict) else None
+        if not isinstance(L, list):
+            return []
+        items, seen = [], set()
+        for it in L[:API_MAX]:
+            if not isinstance(it, dict):
+                continue
+            vid = str(it.get('id') or '').strip()
+            if not vid or vid in seen:
+                continue
+            seen.add(vid)
+            self._meta_set(vid, it)  # 缓存含 lines → 详情/播放零请求
+            items.append({'vod_id': vid, 'vod_name': str(it.get('name') or '')[:80],
+                          'vod_pic': self._pic(str(it.get('pic') or '')),
+                          'vod_remarks': str(it.get('remarks') or '')[:40]})
+        return items
 
     def _total(self, h):
         m = re.search(r'共\s*([\d,]+)\s*[部个条]', h or '')
@@ -1322,6 +1398,16 @@ class Spider(Spider):
         c = self._tget('d:' + vid, TTL_DETAIL)
         if c:
             return c
+        if API:  # ★ API优先: 元数据缓存(搜索命中过) → api.php?act=detail&id= → HTML兜底
+            md = self._meta_get(vid)
+            if not md:
+                d2 = self._api('detail', id=vid)
+                md = d2.get('vod') if isinstance(d2.get('vod'), dict) else None
+            if md:
+                self._meta_set(vid, md)
+                dd = self._mk_detail(vid, md)
+                if dd.get('vod_name') and dd.get('vod_play_from'):
+                    return self._tset('d:' + vid, {'list': [dd]})
         h = self._rty('dt:%s' % vid, lambda: self._get('%s/detail/%s.html' % (self.base, vid)), (0, 0.45, 1.2))
         if not h:
             _log('detail miss %s' % vid)
@@ -1409,26 +1495,7 @@ class Spider(Spider):
                 if h2 and self._vods(h2):
                     ph = h2
                     break
-        for ln in self._vods(ph):
-            if not isinstance(ln, dict):
-                continue
-            name = str(ln.get('name') or '').strip()
-            eps = ln.get('eps') or []
-            if not name or not isinstance(eps, list) or not eps:
-                continue
-            seg = []
-            for k, ep in enumerate(eps):
-                if not isinstance(ep, dict):
-                    continue
-                t = self._safe(str(ep.get('t') or ('第%d集' % (k + 1))).strip())
-                u = str(ep.get('u') or '').strip()
-                if not u:
-                    continue
-                seg.append('%s$%s' % (t or ('第%d集' % (k + 1)), u))
-            if seg:
-                froms.append(FROM_NAMES.get(name, name))
-                urls.append('#'.join(seg))
-        return froms, urls
+        return self._lines2pu(self._vods(ph))
 
     def _live_items(self, h):
         items = []
@@ -1499,6 +1566,13 @@ class Spider(Spider):
             return c
         if pn > 1:  # ★ 站方搜索单页上限50条无真分页(?pg= 无效), >1 直接短路防空页翻
             return {'list': [], 'page': pn, 'pagecount': 1, 'total': 0}
+        if API:  # ★ API快搜优先: /api.php?act=search&wd= 整词最多50条(结构化含全选集)
+            items = self._api_search(kw)
+            if items:
+                self._li_mem(items)
+                r = {'list': items, 'page': pn, 'pagecount': 1, 'total': len(items)}
+                return self._tset(ck, r)
+            _log('api search miss %s' % kw)
         h = self._rty('sq:%s:%s' % (kw, pn), lambda: self._get('%s/?wd=%s&pg=%s' % (self.base, quote(kw), pn)), (0, 0.45))
         if not h:
             return {'list': [], 'page': pn, 'pagecount': 1}
@@ -1600,6 +1674,7 @@ class Spider(Spider):
             self._c.clear()
             self._pc.clear()
             self._ttl.clear()
+            self._meta.clear()
             self._srv = None
         except Exception:
             pass
