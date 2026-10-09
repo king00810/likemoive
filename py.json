@@ -935,6 +935,18 @@
             "name": "咸鱼影视.py",
             "type": 3,
             "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/咸鱼影视.py"
+        },
+             {
+            "key": "有新剧",
+            "name": "有新剧.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/有新剧.py"
+        },
+             {
+            "key": "鬼片之家",
+            "name": "鬼片之家.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/鬼片之家.py"
         }
        
     ],
