@@ -947,8 +947,93 @@
             "name": "鬼片之家.py",
             "type": 3,
             "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/鬼片之家.py"
+        },
+            {
+            "key": "咕噜咕噜4K",
+            "name": "咕噜咕噜4K.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/咕噜咕噜4K.py"
+        },{
+            "key": "趣谷(2K)",
+            "name": "趣谷(2K).py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/趣谷(2K).py"
+        }, {
+            "key": "影探4K",
+            "name": "影探4K.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/影探4K.py"
+        }, {
+            "key": "FreeOK",
+            "name": "FreeOK.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/FreeOK.py"
+        }, {
+            "key": "l98",
+            "name": "l98.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/l98.py"
+        }, {
+            "key": "TVB云播代理版@easy",
+            "name": "TVB云播代理版@easy.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/TVB云播代理版@easy.py"
+        }, {
+            "key": "VIP兔",
+            "name": "VIP兔.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/VIP兔.py"
+        }, {
+            "key": "爱听音乐",
+            "name": "爱听音乐.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/爱听音乐.py"
+        }, {
+            "key": "哔哩直播",
+            "name": "哔哩直播.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/哔哩直播.py"
+        }, {
+            "key": "豆花影视",
+            "name": "豆花影视.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/豆花影视.py"
+        }, {
+            "key": "饭团影视",
+            "name": "饭团影视.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/饭团影视.py"
+        }, {
+            "key": "瓜子影视",
+            "name": "瓜子影视.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/瓜子影视.py"
+        }, {
+            "key": "好剧影视",
+            "name": "好剧影视.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/好剧影视.py"
+        }, {
+            "key": "可可影视",
+            "name": "可可影视.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/可可影视.py"
+        }, {
+            "key": "网络直播",
+            "name": "网络直播.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/网络直播.py"
+        }, {
+            "key": "新影视",
+            "name": "新影视.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/新影视.py"
+        }, {
+            "key": "央视",
+            "name": "央视.py",
+            "type": 3,
+            "api": "https://gh-proxy.com/https://raw.githubusercontent.com/king00810/likemoive/refs/heads/main/py/央视.py"
         }
-       
     ],
     "parses": [
         {
@@ -1104,7 +1189,7 @@
         },
         {
             "name": "Quad9",
-            "url": "https://dns.quad9.net/dns-quer",
+            "url": "https://dns.quad9.net/dns-query",
             "ips": [
                 "9.9.9.9",
                 "149.112.112.112"
